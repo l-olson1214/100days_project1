@@ -20,13 +20,11 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                Section("Bill Total") {
                     TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
                     
-                } header: {
-                    Text("Bill Total")
                 }
                     
                 Section {
@@ -39,12 +37,12 @@ struct ContentView: View {
                 }
                 
                 Section("How much tip do you want to leave?") {
-                    Picker("Tip percentage", selection: $tipPercentage) {
-                        ForEach(tipPercentages, id: \.self) {
+                    Picker("How much tip do you want to leave?", selection: $tipPercentage) {
+                        ForEach(0..<101) {
                             Text($0, format: .percent)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.navigationLink)
                 }
                 
                 Section {
@@ -55,7 +53,7 @@ struct ContentView: View {
                     
                     HStack {
                         Text("Total Check:")
-                        Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        Text(totalCheckAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                     }
                 } header: {
                     Text("Costs")
@@ -87,7 +85,6 @@ struct ContentView: View {
     }
     
     var totalCheckAmount: Double {
-        let peopleCount = Double(numberOfPeople + 2)
         let tipSelection = Double(tipPercentage)
 
         let tipValue = checkAmount / 100 * tipSelection
